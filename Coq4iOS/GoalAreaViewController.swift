@@ -80,22 +80,31 @@ class GoalAreaViewController: UIViewController {
                     self.textView.text = ans
                     // Container View から親への受け渡し
                     let detailViewController = self.parent as! DetailViewController
-                    detailViewController.scriptArea.insertText("apply \(self.dragLabel.text!) ." + "\n")
+                    let textAdd = NSAttributedString(string: "apply \(self.dragLabel.text!) .", attributes:detailViewController.stringAttributes)
+                    let newLine = NSAttributedString(string: " \n ", attributes:detailViewController.stringAttributesN)
+                    detailViewController.mutableAttributedString.append(textAdd)
+                    detailViewController.mutableAttributedString.append(newLine)
+                    detailViewController.scriptArea.attributedText = detailViewController.mutableAttributedString
                 })
             }else if (mode == "intro"){
                 // intro 実行
-                eval("intro .", {(res:Bool, ans:String?) -> Void in
+                eval("intros .", {(res:Bool, ans:String?) -> Void in
                     fputs(ans, stderr);
                     self.textView.text = ans
                     // Container View から親への受け渡し
                     let detailViewController = self.parent as! DetailViewController
-                    detailViewController.scriptArea.insertText("intro ." + "\n")
+                    let textAdd = NSAttributedString(string: "intros.", attributes:detailViewController.stringAttributes)
+                    let newLine = NSAttributedString(string: " \n ", attributes:detailViewController.stringAttributesN)
+                    detailViewController.mutableAttributedString.append(textAdd)
+                    detailViewController.mutableAttributedString.append(newLine)
+                    detailViewController.scriptArea.attributedText = detailViewController.mutableAttributedString
                 })
             }
         }
         self.dragLabel.isHidden = true
     }
     @IBAction func panGes(_ sender: UIPanGestureRecognizer) {
+        pan.maximumNumberOfTouches = 1
         state = sender.state
         if state == .began {
             beganSwip(sender)
@@ -118,7 +127,7 @@ class GoalAreaViewController: UIViewController {
     //            fputs(msg, stderr)
     //            self.textView.text = msg
     //        });
-    //        eval("Theorem id: forall A, A -> A.", {(res:Bool, ans:String?) -> Void in
+    //        eval("c", {(res:Bool, ans:String?) -> Void in
     //            fputs(ans, stderr);
     //            self.textView.text = ans
     //        });
